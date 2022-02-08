@@ -2,7 +2,7 @@ NAME = pepix
 
 CC = cc
 
-FLAGS = -Wall -Wextra -	Werror
+FLAGS = -Wall -Wextra -Werror
 
 SRC = pipex.c split.c  utils.c str_join.c
 
