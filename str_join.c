@@ -1,4 +1,4 @@
-#include<unistd.h>
+#include "pipex.h"
 
 int ft_strlen(char *str)
 {
@@ -15,7 +15,12 @@ char *str_join(char *path, char *cmd)
     int		i;
     int		j;
 
-	join = (char*)malloc(ft_strlen(path) + ft_strlen(cmd) + 2);
+	join = malloc(ft_strlen(path) + ft_strlen(cmd) + 2);
+	if(!join)
+	{
+		free(join);
+		return(NULL);
+	}
 	i = 0;
 	j = 0;
 	while(path[i])
@@ -24,6 +29,6 @@ char *str_join(char *path, char *cmd)
 	i = 0;
 	while(cmd[i])
 		join[j++] = cmd[i++];
-	join[j++] = 0;
+	join[j] = 0;
 	return(join);
 }

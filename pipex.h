@@ -7,7 +7,7 @@
 #include<sys/wait.h>
 
 char    *str_join(char *path, char *cmd);
-char    **str_split(char *str,char *sp);
+char    **str_split(char *str,char sp);
 int     ft_strlen(char *str);
 char	*str_ncp(char *str,int n);
 int     char_check(char *str,char c);

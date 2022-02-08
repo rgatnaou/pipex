@@ -18,7 +18,7 @@ int     str_check(char *str1,char *str2,int n)
 	int	i;
 
 	i = 0;
-	while(str1[i] && str2[i] && str1[i] == str2[i] (i < n - 1))
+	while(str1[i] && str2[i] && str1[i] == str2[i] && (i < n - 1))
 		i++;
-	return(str1[i] - str2[i])
+	return(str1[i] - str2[i]);
 }
