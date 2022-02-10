@@ -1,66 +1,89 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   split.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rgatnaou <rgatnaou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/10 18:26:14 by rgatnaou          #+#    #+#             */
+/*   Updated: 2022/02/10 18:26:18 by rgatnaou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "pipex.h"
-void	ft_free(char **str)
+
+static int	count(char *s, char c)
 {
-	int i;
+	int	i;
+	int	w;
 
 	i = 0;
-	while(str[i])
+	w = 0;
+	while (s[i])
 	{
-		free(str[i]);
-		str[i] = NULL;
+		if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0'))
+			w++;
 		i++;
 	}
+	return (w);
 }
 
-char	*str_ncp(char *str,int n)
+static int	len(char *s, char c)
 {
-	char	*cp;
-	int		i;
+	int	i;
 
 	i = 0;
-	cp = malloc(n + 1);
-	if(!cp)
-	{
-		free(cp);
-		return(NULL);
-	}
-	while (i < n)
-	{
-		cp[i] = str[i];
+	while (s[i] && s[i] != c)
 		i++;
-	}
-	cp[n] = 0;
-	return(cp);
+	return (i);
 }
 
-char	**str_split(char *str,char sp)
+static void	leak(char **split, int l)
 {
-	char	**tab;
-	int		count;
-	int		i;
-	int		j;
+	int	i;
 
-	i = 0;
-	count = 0;
-	while (str[i])
-		if (str[i++] == sp)
-			count++;
-	tab = (char**)malloc(sizeof(char*) * (count + 2));
-	if (!tab)
+	i = -1;
+	while (++i < l)
+		free(split[i]);
+	free(split);
+}
+
+static void	write_sp(char **split, char *s, char c, int w)
+{
+	int	i;
+	int	j;
+	int	l;
+
+	i = -1;
+	while (++i < w)
 	{
-		ft_free(tab);
-		return(NULL);
-	}
-	tab[count + 1] = NULL;
-	i = 0;
-	while (i < count + 1)
-	{
+		while (c == *s)
+			s++;
+		l = len(s, c);
+		split[i] = (char *)malloc(sizeof(char) * l + 1);
+		if (!split[i])
+			leak(split, i);
 		j = 0;
-		while (str[j] && str[j] != sp)
-			j++;
-		tab[i++] = str_ncp(str, j);
-		str = str + j + 1;
+		while (j < l)
+			split[i][j++] = *s++;
+		split[i][j] = '\0';
 	}
-	return(tab);
+}
+
+char	**str_split(char *s, char c)
+{
+	int		w;
+	char	**split;
+
+	if (!s)
+		return (NULL);
+	w = count(s, c);
+	if (w == 0)
+		return(NULL);
+	split = (char **)malloc(sizeof(char *) * w + 1);
+	if (!split)
+		return (NULL);
+	write_sp(split, s, c, w);
+	split[w] = 0;
+	return (split);
 }

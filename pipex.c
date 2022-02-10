@@ -1,4 +1,15 @@
-#include<stdio.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rgatnaou <rgatnaou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/10 18:26:34 by rgatnaou          #+#    #+#             */
+/*   Updated: 2022/02/10 18:27:20 by rgatnaou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 
 int	file(char *path, int inout)
@@ -7,9 +18,9 @@ int	file(char *path, int inout)
 	{
 		if  (access(path, F_OK))
 		{
-			write(2,"pipex: ", 7);
+			write(2,"Pipex: \"", 8);
 			write(2, path, ft_strlen(path));
-			write(2, " (No such file or directory)\n", 29);
+			write(2, "\": No such file or directory\n", 29);
 			return(0);
 		}
 		return(open(path, O_RDONLY));
@@ -50,16 +61,22 @@ void	exec(char *cmd, char **envp)
 {
 	char	**sp_cmd;
 	char	*path;
-
+	
 	sp_cmd = str_split(cmd,' ');
+	if (!sp_cmd)
+	{
+		write(2,"pipex: \"", 8);
+		write(2, "\":Command Not Found\n", 20);
+		exit(1);
+	}
 	if (char_check(sp_cmd[0],'/' ) != -1)
 		path = sp_cmd[0];
 	else
 		path = get_path(sp_cmd[0], envp);
 	execve(path, sp_cmd, envp);
-	write(2,"pipex: ", 7);
+	write(2,"pipex: \"", 8);
 	write(2, cmd, ft_strlen(cmd));
-	write(2, " (Command Not Found)\n", 29);
+	write(2, "\":Command Not Found)\n", 21);
 	exit(1);
 }
 
@@ -81,7 +98,7 @@ void	readir(char *cmd, char **envp, int fd)
 		close(pipefd[0]);
 		dup2(pipefd[1], 1);
 		if(fd == 0)
-			exit(2);
+			exit(1);
 		exec(cmd, envp);
 	}
 }
@@ -99,6 +116,7 @@ int	main (int argc, char **argv, char **envp)
 		dup2(fd_w, 1);
 		readir(argv[2], envp, fd_r);
 		exec(argv[3], envp);
+
 	}
 	else
 		write(2,"Pipex: (Invalid args.)\n",23);
