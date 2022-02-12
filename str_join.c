@@ -6,7 +6,7 @@
 /*   By: rgatnaou <rgatnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 18:26:06 by rgatnaou          #+#    #+#             */
-/*   Updated: 2022/02/10 18:26:08 by rgatnaou         ###   ########.fr       */
+/*   Updated: 2022/02/10 20:11:01 by rgatnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ int ft_strlen(char *str)
 } 
 char *str_join(char *path, char *cmd)
 {
-    char	*join;
-    int		i;
-    int		j;
+	char	*join;
+	int		i;
+	int		j;
 
 	join = malloc(ft_strlen(path) + ft_strlen(cmd) + 2);
 	if(!join)

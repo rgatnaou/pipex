@@ -6,13 +6,13 @@
 /*   By: rgatnaou <rgatnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 18:26:14 by rgatnaou          #+#    #+#             */
-/*   Updated: 2022/02/10 18:26:18 by rgatnaou         ###   ########.fr       */
+/*   Updated: 2022/02/11 15:38:41 by rgatnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static int	count(char *s, char c)
+int	count(char *s, char c)
 {
 	int	i;
 	int	w;
@@ -28,7 +28,7 @@ static int	count(char *s, char c)
 	return (w);
 }
 
-static int	len(char *s, char c)
+int	len(char *s, char c)
 {
 	int	i;
 
@@ -38,7 +38,7 @@ static int	len(char *s, char c)
 	return (i);
 }
 
-static void	leak(char **split, int l)
+void	leak(char **split, int l)
 {
 	int	i;
 
@@ -48,7 +48,7 @@ static void	leak(char **split, int l)
 	free(split);
 }
 
-static void	write_sp(char **split, char *s, char c, int w)
+void	write_sp(char **split, char *s, char c, int w)
 {
 	int	i;
 	int	j;

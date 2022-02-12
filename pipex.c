@@ -6,7 +6,7 @@
 /*   By: rgatnaou <rgatnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 18:26:34 by rgatnaou          #+#    #+#             */
-/*   Updated: 2022/02/10 18:27:20 by rgatnaou         ###   ########.fr       */
+/*   Updated: 2022/02/12 10:38:03 by rgatnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	file(char *path, int inout)
 {
 	if (inout == 0)
 	{
-		if  (access(path, F_OK))
+		if  (access(path, R_OK))
 		{
 			write(2,"Pipex: \"", 8);
 			write(2, path, ft_strlen(path));
@@ -32,9 +32,9 @@ int	file(char *path, int inout)
 
 char	*get_path(char *cmd, char **envp)
 {
-	char	*path;
+	char	*env;
 	char	*dir;
-	char 	*bin;
+	char 	*path;
 	int		i;
 
 	i = 0;
@@ -42,17 +42,16 @@ char	*get_path(char *cmd, char **envp)
 		i++;
 	if (!envp[i])
 		return(cmd);
-
-	path = envp[i] + 5;
-	while (path && char_check(path,':') != -1)
+	env = envp[i] + 5;
+	while (env && char_check(env,':') != -1)
 	{
-		dir = str_ncp(path,char_check(path,':'));
-		bin = str_join(dir,cmd);
+		dir = str_ncp(env,char_check(env,':'));
+		path = str_join(dir,cmd);
 		free(dir);
-		if (!access(bin,F_OK))
-			return (bin);
-		free(bin);
-		path += char_check(path,':') + 1;
+		if (!access(path, X_OK))
+			return (path);
+		free(path);
+		env += char_check(env,':') + 1;
 	}
 	return (cmd);
 }
@@ -74,13 +73,14 @@ void	exec(char *cmd, char **envp)
 	else
 		path = get_path(sp_cmd[0], envp);
 	execve(path, sp_cmd, envp);
+	ft_free(sp_cmd);
 	write(2,"pipex: \"", 8);
 	write(2, cmd, ft_strlen(cmd));
 	write(2, "\":Command Not Found)\n", 21);
 	exit(1);
 }
 
-void	readir(char *cmd, char **envp, int fd)
+void	readir(char *cmd, char **envp)
 {
 	pid_t	pid;
 	int		pipefd[2];
@@ -97,8 +97,6 @@ void	readir(char *cmd, char **envp, int fd)
 	{
 		close(pipefd[0]);
 		dup2(pipefd[1], 1);
-		if(fd == 0)
-			exit(1);
 		exec(cmd, envp);
 	}
 }
@@ -114,11 +112,11 @@ int	main (int argc, char **argv, char **envp)
 		fd_w = file(argv[4], 1);
 		dup2(fd_r, 0);
 		dup2(fd_w, 1);
-		readir(argv[2], envp, fd_r);
+		readir(argv[2], envp);
 		exec(argv[3], envp);
-
 	}
 	else
-		write(2,"Pipex: (Invalid args.)\n",23);
+		write(2,"Pipex: (Invalid args.)\n",23);	
 	return (1);
+		
 }

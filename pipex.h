@@ -6,7 +6,7 @@
 /*   By: rgatnaou <rgatnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 18:26:24 by rgatnaou          #+#    #+#             */
-/*   Updated: 2022/02/10 18:26:26 by rgatnaou         ###   ########.fr       */
+/*   Updated: 2022/02/11 16:38:04 by rgatnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,12 @@
 #include<sys/wait.h>
 #include<stdio.h>
 
-char    *str_join(char *path, char *cmd);
-char    **str_split(char *str,char sp);
-int     ft_strlen(char *str);
+char	*str_join(char *path, char *cmd);
+char	**str_split(char *str,char sp);
+int		ft_strlen(char *str);
 char	*str_ncp(char *str,int n);
-int     char_check(char *str,char c);
-int     str_check(char *str1,char *str2,int n);
+int		char_check(char *str,char c);
+int		str_check(char *str1,char *str2,int n);
+void	ft_free(char **str);
 
 #endif
